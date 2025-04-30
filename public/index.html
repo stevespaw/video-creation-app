@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Creation App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Create Video from an Image with High Quality Audio</h1>
+  <h2>Select an audio file and an image to create an MP4 video</h2>
+  <h2>Select local file OR URL locations - Then press "Create Video"</h2>
+  <h2>This will create an MP4 with the same name as the input audio file</h2>
+  <h3>It will overwrite any output file with the same name</h3>
+  <h3>The video resolution will be the same as the input image size</h3>
+  
+  <form id="videoForm" enctype="multipart/form-data">
+    <label>Audio File: <input type="file" name="audioFile" accept="audio/mp3"></label><br>
+    <label>Image File: <input type="file" name="imageFile" accept="image/png"></label><br>
+    <label>Audio URL: <input type="text" name="audioUrl" placeholder="Enter audio URL"></label><br>
+    <label>Image URL: <input type="text" name="imageUrl" placeholder="Enter image URL"></label><br>
+    <button type="submit">Create Video</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+document.getElementById('videoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  // Show processing message
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = '<p class="processing">Processing...</p>';
+  
+  const formData = new FormData(e.target);
+  try {
+    const response = await fetch('/create-video', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    if (data.outputUrl) {
+      resultDiv.innerHTML = `<p>Video created! <a href="${data.outputUrl}">Download here</a></p>`;
+    } else {
+      resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+    }
+  } catch (error) {
+    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+});
+  </script>
+</body>
+<footer>
+  <h3>The output file will be in the s3 bucket set in the .env in a folder "video-creation"</h3>
+  <h3>API is also available:</h3>
+  <h3> curl -X POST http://"server":"port"/create-video   -F "audioUrl=https://example.com/AudioExample.mp3"   -F "imageUrl=https://example.com/ImageExample.png"</h3>
+  <p>Author: SS</p>
+  <p><a href="https://github.com/stevespaw">Github</a></p>
+</footer>
+</html>
