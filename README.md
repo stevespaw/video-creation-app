@@ -34,9 +34,9 @@ Access at `/` and fill in MP3 and image URLs.
 ## Environment Variables (`.env`)
 
 ```
-AWS_ACCESS_KEY_ID=your-idrive-e2-key
-AWS_SECRET_ACCESS_KEY=your-idrive-e2-secret
-AWS_ENDPOINT=https://your-idrive-e2-endpoint.com
+AWS_ACCESS_KEY_ID=your-s3-e2-key
+AWS_SECRET_ACCESS_KEY=your-s3-e2-secret
+AWS_ENDPOINT=https://your-s3-e2-endpoint.com
 AWS_BUCKET=your-bucket-name
 REGION=us-east-1
 ```
@@ -46,13 +46,13 @@ REGION=us-east-1
 ### Build
 
 ```bash
-docker-compose build
+docker compose build
 ```
 
 ### Run
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 App will be available at http://localhost:3000
@@ -87,14 +87,15 @@ curl -X POST http://localhost:3000/create-video \
 
 ## Notes
 
-- The application creates H.264 MP4 videos compatible with most players.  
+- The application creates H.264 MP4 videos compatible with most players.
+- The API will return the URL of the completed file 
 - HTTP URLs are downloaded using `axios` and processed locally.  
 - Output files are stored in the `uploads` directory or at the specified `outputUrl`.  
 - The Docker image includes FFmpeg, ensuring consistency across environments.  
 - For production, add authentication, rate limiting, and input validation.  
 - Clean up the `uploads` directory periodically to manage disk space.
 
-  ## Pull
+  ## Docker Pull
   docker pull stevespaw/video-creation-app:latest
   ## Sample Run
   docker run -d --restart=always --name videocreator \
