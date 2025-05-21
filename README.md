@@ -93,3 +93,16 @@ curl -X POST http://localhost:3000/create-video \
 - The Docker image includes FFmpeg, ensuring consistency across environments.  
 - For production, add authentication, rate limiting, and input validation.  
 - Clean up the `uploads` directory periodically to manage disk space.
+
+  ## Pull
+  docker pull stevespaw/video-creation-app:latest
+  ## Sample Run
+  docker run -d --restart=always --name videocreator \
+   -p 3000:3000 \
+   -e S3_ENDPOINT=https://z3w1.da12.xxxxx.com \
+   -e S3_REGION=us-da \
+   -e S3_ACCESS_KEY=xxxxxxxxx \
+   -e S3_SECRET_KEY=xxxxxxxxxx \
+   -e S3_BUCKET=ffmpeg \
+   stevespaw/video-creation-app:latest
+
